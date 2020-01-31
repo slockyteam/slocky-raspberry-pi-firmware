@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<base href="/">
+	<title>Slocky</title>
+	<meta name="description" content=""/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	<meta name="viewport" content="width=devide-width, initial-scale=1.0"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	
+	<link rel="icon" type="image/png" href="assets/favicon.png"/>
+	
+	<!-- CSS -->
+	
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css"/>
+	
+	<link rel="stylesheet" href="bower_components/ngprogress/ngProgress.css"/>
+	<link rel="stylesheet" href="bower_components/components-font-awesome/css/all.css"/>
+	<link rel="stylesheet" href="bower_components/flag-icon-css/css/flag-icon.min.css"/>
+	
+	<link rel="stylesheet" href="css/style.css"/>
+	
+	<!-- JS -->
+	
+	<script src="bower_components/popper.js/dist/umd/popper.min.js"></script>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/angular-route/angular-route.min.js"></script>
+	<script src="bower_components/angular-cookies/angular-cookies.min.js"></script>
+	
+	<script src="bower_components/ngprogress/build/ngprogress.min.js"></script>
+	
+	<script src="app.js"></script>
+	<script src="app.routes.js"></script>
+	<script src="app.services.js"></script>
+	
+	<!-- SECTIONS -->
+	
+	<link rel="stylesheet" href="partials/navbar/navbar.css">
+	<script src="partials/navbar/navbar.ctrl.js"></script>
+	<link rel="stylesheet" href="partials/alerts/alerts.css">
+	
+	<script src="sections/device_details/device_details.ctrl.js"></script>
+	<script src="sections/device_settings/device_settings.ctrl.js"></script>
+	<script src="sections/network_settings/network_settings.ctrl.js"></script>
+</head>
+
+<body ng-app="Slocky" ng-cloak>
+	<div>
+		<!-- ANGULAR DYNAMIC CONTENT -->
+
+		<div ng-view></div>
+		
+		<!-- ALERTS -->
+		
+		<div ng-include="'partials/alerts/alerts.html'"></div>
+	</div>
+</body>
+</html>

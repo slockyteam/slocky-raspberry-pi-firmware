@@ -1,0 +1,68 @@
+<!-- NAVBAR -->
+
+<div ng-include="'partials/navbar/navbar.html'"></div>
+
+<ng-controller ng-controller="DeviceSettingsController">
+
+	<!-- CONTENT -->
+	
+	<div class="content">
+		<div class="panel panel-default">			
+			<div class="panel-heading clearfix hide-lg-down">
+				<div class="panel-heading-title">
+					<h4>{{ languageData.device_settings.panel_title }}</h4>
+				</div>
+				
+			</div>
+			
+			<div class="panel-body" style="padding: 15px 15px 0px 15px;">
+				 <form name="form" ng-submit="form.$valid && saveDeviceSettings(form);">
+					<div class="form-group">
+						<label><b>{{ languageData.device_settings.web_socket_url_title }}</b></label>
+
+						<input class="form-control mb-3" placeholder="{{ languageData.device_settings.web_socket_url_placeholder }}" ng-model="deviceSettings.web_socket_url" ng-required="(loggedUser.role == 'admin') ? true : false"/>
+					</div>
+
+					<div class="form-group">
+						<label><b>{{ languageData.device_settings.api_server_url_title }}</b></label>
+
+						<input class="form-control mb-3" placeholder="{{ languageData.device_settings.api_server_url_placeholder }}" ng-model="deviceSettings.api_server_url" ng-required="(loggedUser.role == 'admin') ? true : false"/>
+					</div>
+					
+					<div class="form-group">
+						<label><b>{{ languageData.device_settings.web_socket_ping_interval_title }}</b></label>
+
+						<input type="number" class="form-control mb-3" placeholder="{{ languageData.device_settings.web_socket_ping_interval_placeholder }}" ng-model="deviceSettings.web_socket_ping_interval" required/>
+					</div>
+					
+					<div class="form-group">
+						<label><b>{{ languageData.device_settings.web_socket_reconnect_interval_title }}</b></label>
+
+						<input type="number" class="form-control mb-3" placeholder="{{ languageData.device_settings.web_socket_reconnect_interval_placeholder }}" ng-model="deviceSettings.web_socket_reconnect_interval" required/>
+					</div>
+					
+					<div class="form-group">
+						<label><b>{{ languageData.device_settings.web_socket_update_data_interval_title }}</b></label>
+
+						<input type="number" class="form-control mb-3" placeholder="{{ languageData.device_settings.web_socket_update_data_interval_placeholder }}" ng-model="deviceSettings.web_socket_update_data_interval" required/>
+					</div>
+					
+					<div class="form-group">
+						<label><b>{{ languageData.device_settings.device_time_zone_title }}</b></label>
+
+						<input type="text" class="form-control mb-3" placeholder="{{ languageData.device_settings.device_time_zone_placeholder }}" ng-model="deviceSettings.device_time_zone" required/>
+					</div>
+					
+	                <div class="form-group">
+						<button type="submit" class="btn btn-success btn-block">{{ languageData.device_settings.submit_button }}</button>
+					</div>
+	            </form>
+			</div>
+		</div>
+	</div>
+	
+</ng-controller>
+
+<!-- FOOTER -->
+
+<div ng-include="'partials/footer/footer.html'"></div>

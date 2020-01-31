@@ -1,0 +1,146 @@
+<!-- NAVBAR -->
+
+<div ng-include="'partials/navbar/navbar.html'"></div>
+
+<ng-controller ng-controller="DeviceDetailsController">
+
+	<!-- CONTENT -->
+	
+	<div class="content">
+		<div class="panel panel-default">			
+			<div class="panel-heading clearfix d-flex flex-wrap no-after justify-content-end">
+				<div class="panel-heading-title mr-auto hide-lg-down">
+					<h4>{{ languageData.device_details.panel_title }}</h4>
+				</div>
+				
+				<div class="ml-3" style="display: flex; align-items: center;">
+					<a class="ml-1 btn btn-danger" ng-show="deviceInfo != null" href="#" ng-click="rebootDevice();">{{ languageData.device_details.reboot_button }}</a>
+					
+					<a class="ml-1 btn btn-info" ng-show="deviceSettings.cpu_monitoring_port != null" href="http://{{ locationHost }}:{{ deviceSettings.cpu_monitoring_port }}">{{ languageData.device_details.cpu_monitoring_button }}</a>
+				</div>
+			</div>
+			
+			<div class="panel-body">
+				<div ng-if="isLoadingDeviceInfo" class="d-flex justify-content-center" style="padding: 40px;">
+						<div class="spinner-border text-dark" role="status"></div>
+					</div>
+					
+					<div ng-show="!isLoadingDeviceInfo" style="padding: 15px; word-break: break-all;">
+						<label><b>{{ languageData.device_details.status_title }}</b></label>
+							<span class="badge badge-success badge-pill" ng-show="deviceInfo.status == 'online'" style="margin-left: 4px;">{{ languageData.device_details.online_text }}</span>
+							<span class="badge badge-secondary badge-pill" ng-show="deviceInfo.status == 'offline'" style="margin-left: 4px;">{{ languageData.device_details.offline_text }}</span>
+							<span ng-show="deviceInfo.status == null">/</span>
+						<br>
+						<label><b>{{ languageData.device_details.device_alias_title }}</b> {{ deviceInfo.device_alias ? deviceInfo.device_alias : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.device_identifier_title }}</b> {{ deviceInfo.device_identifier ? deviceInfo.device_identifier : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.hardware_version_title }}</b> {{ deviceInfo.hardware_version ? deviceInfo.hardware_version : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.firmware_version_title }}</b> {{ deviceInfo.firmware_version ? deviceInfo.firmware_version : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.bootloader_version_title }}</b> {{ deviceInfo.bootloader_version ? deviceInfo.bootloader_version : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.device_time_zone_title }}</b> {{ deviceSettings.device_time_zone ? deviceSettings.device_time_zone : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.services_title }}</b> <span ng-show="!deviceInfo.services || deviceInfo.services.length == 0">/</span></label><br>
+						
+						<ol ng-show="deviceInfo.services.length > 0">
+							<li ng-repeat="service in deviceInfo.services">
+								{{ service.service_alias }}
+									
+								<span class="badge badge-success badge-pill" ng-show="serviceInfoForService(service).status == 'online'" style="margin-left: 4px;">{{ languageData.device_details.online_text }}</span>
+								<span class="badge badge-secondary badge-pill" ng-show="serviceInfoForService(service).status == 'offline'" style="margin-left: 4px;">{{ languageData.device_details.offline_text }}</span>
+							</li>
+						</ol>
+						
+						<label><b>{{ languageData.device_details.heartbeat_at_title }}</b> {{ deviceInfo.heartbeat_at ? (deviceInfo.heartbeat_at | date:'medium') : '/' }}</label><br>
+						<label><b>{{ languageData.device_details.connected_at_title }}</b> {{ deviceInfo.connected_at ? (deviceInfo.connected_at | date:'medium') : '/' }}</label><br>
+						<label style="margin-bottom: 0px;"><b>{{ languageData.device_details.disconnected_at_title }}</b> {{ deviceInfo.disconnected_at ? (deviceInfo.disconnected_at | date:'medium') : '/' }}</label><br>
+						
+						<div ng-if="isLoadingNetworkInfo == true || networkInfo != null" class="card" style="margin-top: 15px;">
+							<div class="card-header">
+								<b>{{ languageData.device_details.network_info.panel_title }}</b>
+							</div>
+							
+							<div ng-if="isLoadingNetworkInfo == false">
+								<div class="card-header">
+									<ul class="nav nav-tabs card-header-tabs">
+										<li class="nav-item" ng-show="networkInfo.eth0 != null">
+											<a class="nav-link" ng-class="{ active: (selectedNetworkInfoTab == 0) }" href="#" ng-click="selectedNetworkInfoTab = 0;">{{ languageData.device_details.network_info.ethernet.title }}<span ng-show="networkInfo.eth0.router_enabled == true"> {{ languageData.device_details.network_info.ethernet.router_title }} </span></a>
+										</li>
+										<li class="nav-item" ng-show="networkInfo.wlan0 != null">
+											<a class="nav-link" ng-class="{ active: (selectedNetworkInfoTab == 1) }" href="#" ng-click="selectedNetworkInfoTab = 1;">{{ languageData.device_details.network_info.wifi.title }}<span ng-show="networkInfo.wlan0.access_point != null"> {{ languageData.device_details.network_info.wifi.access_point_title }} </span></a>
+										</li>
+										<li class="nav-item" ng-show="networkInfo.ppp0 != null">
+											<a class="nav-link" ng-class="{ active: (selectedNetworkInfoTab == 2) }" href="#" ng-click="selectedNetworkInfoTab = 2;">{{ languageData.device_details.network_info.cellular.title }}</a>
+										</li>
+									</ul>
+								</div>
+								
+								<div class="card-body" style="padding: 1px;">
+									<div ng-show="selectedNetworkInfoTab == 0">
+										<div>
+											<ul class="list-group list-group-flush" ng-show="networkInfo.eth0 != null">
+												<li class="list-group-item" ng-show="networkInfo.eth0.ipv4 != null"><b>{{ languageData.device_details.network_info.ip_address_title }}</b> {{ networkInfo.eth0.ipv4.ip_address }}</li>
+												<li class="list-group-item" ng-show="networkInfo.eth0.ipv4 != null"><b>{{ languageData.device_details.network_info.broadcast_title }}</b> {{ networkInfo.eth0.ipv4.broadcast }}</li>
+												<li class="list-group-item" ng-show="networkInfo.eth0.ipv4 != null"><b>{{ languageData.device_details.network_info.mask_title }}</b> {{ networkInfo.eth0.ipv4.mask }}</li>
+												<li class="list-group-item" ng-show="networkInfo.eth0.rx_bytes != null"><b>{{ languageData.device_details.network_info.rx_bytes_title }}</b> {{ networkInfo.eth0.rx_bytes }}</li>
+												<li class="list-group-item" ng-show="networkInfo.eth0.tx_bytes != null"><b>{{ languageData.device_details.network_info.tx_bytes_title }}</b> {{ networkInfo.eth0.tx_bytes }}</li>
+												<li class="list-group-item" ng-show="networkInfo.eth0.dhcp_enabled != null"><b>{{ languageData.device_details.network_info.ethernet.dhcp_enabled_title }}</b> <span ng-show="networkInfo.eth0.dhcp_enabled == true">{{ languageData.boolean_values.true }}</span><span ng-show="networkInfo.eth0.dhcp_enabled == false">{{ languageData.boolean_values.false }}</span></li>
+												<li class="list-group-item" ng-show="networkInfo.eth0.router_enabled != null"><b>{{ languageData.device_details.network_info.ethernet.router_enabled_title }}</b> <span ng-show="networkInfo.eth0.router_enabled == true">{{ languageData.boolean_values.true }}</span><span ng-show="networkInfo.eth0.router_enabled == false">{{ languageData.boolean_values.false }}</span></li>
+											</ul>
+										</div>
+									</div>
+									
+									<div ng-show="selectedNetworkInfoTab == 1">
+										<div>
+											<ul class="list-group list-group-flush" ng-show="networkInfo.wlan0 != null">
+												<li class="list-group-item" ng-show="networkInfo.wlan0.ipv4 != null"><b>{{ languageData.device_details.network_info.ip_address_title }}</b> {{ networkInfo.wlan0.ipv4.ip_address }}</li>
+												<li class="list-group-item" ng-show="networkInfo.wlan0.ipv4 != null"><b>{{ languageData.device_details.network_info.broadcast_title }}</b> {{ networkInfo.wlan0.ipv4.broadcast }}</li>
+												<li class="list-group-item" ng-show="networkInfo.wlan0.ipv4 != null"><b>{{ languageData.device_details.network_info.mask_title }}</b> {{ networkInfo.wlan0.ipv4.mask }}</li>
+												<li class="list-group-item" ng-show="networkInfo.wlan0.rx_bytes != null"><b>{{ languageData.device_details.network_info.rx_bytes_title }}</b> {{ networkInfo.wlan0.rx_bytes }}</li>
+												<li class="list-group-item" ng-show="networkInfo.wlan0.tx_bytes != null"><b>{{ languageData.device_details.network_info.tx_bytes_title }}</b> {{ networkInfo.wlan0.tx_bytes }}</li>
+												<li class="list-group-item" ng-show="networkInfo.wlan0.connected_network.ssid != null"><b>{{ languageData.device_details.network_info.wlan.ssid_title }}</b> {{ networkInfo.wlan0.connected_network.ssid }}</li>
+											</ul>
+										</div>
+									
+										<div>
+											<ul class="list-group list-group-flush" style="border-top: 1px solid rgba(0,0,0,.125);" ng-show="networkInfo.wlan0.access_point !=null && wifiAccessPointSettings != null">
+												<li class="list-group-item" ng-show="wifiAccessPointSettings.enabled != null"><b>{{ languageData.device_details.network_info.wifi.ap_enabled_title }}</b> <span ng-show="wifiAccessPointSettings.enabled == true">{{ languageData.boolean_values.true }}</span><span ng-show="wifiAccessPointSettings.enabled == false">{{ languageData.boolean_values.false }}</span></li>
+												<li class="list-group-item" ng-show="wifiAccessPointSettings.active != null"><b>{{ languageData.device_details.network_info.wifi.ap_active_title }}</b> <span class="badge badge-success badge-pill" ng-show="wifiAccessPointSettings.active == true">{{ languageData.device_details.network_info.wifi.running_text }}</span><span class="badge badge-secondary badge-pill" ng-show="wifiAccessPointSettings.active == false">{{ languageData.device_details.network_info.wifi.not_running_text }}</span></li>
+												<li class="list-group-item" ng-show="wifiAccessPointSettings.hidden != null"><b>{{ languageData.device_details.network_info.wifi.ap_hidden_title }}</b> <span ng-show="accessPointSettings.hidden == true">{{ languageData.boolean_values.true }}</span><span ng-show="wifiAccessPointSettings.hidden == false">{{ languageData.boolean_values.false }}</span></li>
+												<li class="list-group-item" ng-show="wifiAccessPointSettings.ssid != null"><b>{{ languageData.device_details.network_info.wifi.ssid_title }}</b> {{ wifiAccessPointSettings.ssid }}</li>
+											</ul>
+										</div>
+									</div>
+									
+									<div ng-show="selectedNetworkInfoTab == 2">
+										<div>
+											<ul class="list-group list-group-flush" ng-show="networkInfo.ppp0 != null">
+												<li class="list-group-item" ng-show="networkInfo.ppp0.ipv4 != null"><b>{{ languageData.device_details.network_info.ip_address_title }}</b> {{ networkInfo.ppp0.ipv4.ip_address }}</li>
+												<li class="list-group-item" ng-show="networkInfo.ppp0.ipv4 != null"><b>{{ languageData.device_details.network_info.broadcast_title }}</b> {{ networkInfo.ppp0.ipv4.broadcast }}</li>
+												<li class="list-group-item" ng-show="networkInfo.ppp0.ipv4 != null"><b>{{ languageData.device_details.network_info.mask_title }}</b> {{ networkInfo.ppp0.ipv4.mask }}</li>
+												<li class="list-group-item" ng-show="networkInfo.ppp0.rx_bytes != null"><b>{{ languageData.device_details.network_info.rx_bytes_title }}</b> {{ networkInfo.ppp0.rx_bytes }}</li>
+												<li class="list-group-item" ng-show="networkInfo.ppp0.tx_bytes != null"><b>{{ languageData.device_details.network_info.tx_bytes_title }}</b> {{ networkInfo.ppp0.tx_bytes }}</li>
+												
+												<li class="list-group-item" ng-show="networkInfo.ppp0.signal_quality != null"><b>{{ languageData.device_details.network_info.cellular.signal_quality_title }}</b>
+													<span ng-show="networkInfo.ppp0.signal_quality < 30" class="badge badge-danger">{{ networkInfo.ppp0.signal_quality }} %</span><span ng-show="networkInfo.ppp0.signal_quality >= 30 && networkInfo.ppp0.signal_quality < 60" class="badge badge-warning">{{ networkInfo.ppp0.signal_quality }} %</span><span ng-show="networkInfo.ppp0.signal_quality >= 60" class="badge badge-success">{{ networkInfo.ppp0.signal_quality }} %</span>				
+												</li>
+												<li class="list-group-item" ng-show="networkInfo.ppp0.operator != null"><b>{{ languageData.device_details.network_info.cellular.operator_title }}</b> {{ networkInfo.ppp0.operator }}</li>
+												<li class="list-group-item" ng-show="networkInfo.ppp0.subscriber_number != null"><b>{{ languageData.device_details.network_info.cellular.subscriber_number_title }}</b> {{ networkInfo.ppp0.subscriber_number }}</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div ng-if="isLoadingNetworkInfo == true" class="d-flex justify-content-center" style="padding: 40px;">
+								<div class="spinner-border text-dark" role="status"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</ng-controller>
+
+<!-- FOOTER -->
+
+<div ng-include="'partials/footer/footer.html'"></div>

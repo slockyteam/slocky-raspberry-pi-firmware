@@ -1,0 +1,47 @@
+<ng-controller ng-controller="NavbarController">
+	<div class="bg-dark navbar-dark">
+		<nav class="navbar navbar-expand-lg navbar-padding" ng-model="navbar" id="navbar">
+			<div class="navbar-brand"><a href="/"><img src="assets/logo_white.png" style="width: 34px;"></a></div>
+			
+			<div class="navbar-toggler collapsed" style="border: 0;">
+				<span class="navbar-text p-0" style="color: white;">
+					<span ng-show="isActiveLocationPath('/', 1)">{{ languageData.device_details.panel_title }}</span>
+					<span ng-show="isActiveLocationPath('/device_settings', 1)">{{ languageData.device_settings.panel_title }}</span>
+					<span ng-show="isActiveLocationPath('/network_settings', 1)">{{ languageData.network_settings.panel_title }}</span>
+				</span>
+			</div>
+			
+			<!-- COLLAPSE TOGGLER -->
+			<button id="navbar-toggler-btn" class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			
+			<div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+				<ul class="navbar-nav">
+					<!-- MAIN NAV DROPDOWNS -->
+					<li class="nav-item" ng-class="{ active: isActiveLocationPath('/', 1) }">
+						<a class="nav-link" href="/"><i class="fas fa-info"></i>&nbsp;&nbsp;&nbsp;{{ languageData.device_details.panel_title }}</a>
+					</li>
+					<li class="nav-item" ng-class="{ active: isActiveLocationPath('/device_settings', 1) }">
+						<a class="nav-link" href="/device_settings"><i class="fas fa-cog"></i>&nbsp;&nbsp;&nbsp;{{ languageData.device_settings.panel_title }}</a>
+					</li>
+					<li class="nav-item" ng-class="{ active: isActiveLocationPath('/network_settings', 1) }">
+						<a class="nav-link" href="/network_settings"><i class="fas fa-wifi"></i>&nbsp;&nbsp;&nbsp;{{ languageData.network_settings.panel_title }}</a>
+					</li>
+				</ul>
+				
+				<ul class="navbar-nav">
+					<!-- LANGUAGE DROPDOWN -->
+					<li ng-show="config.languages.length > 1" class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLang" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							{{ languageData.languages[language] }}
+						</a>
+						<div class="dropdown-menu fade-in mb-3" aria-labelledby="navbarDropdownLang">
+							<a class="dropdown-item" href="#" ng-click="$LanguageManager.changeLanguage(lang);" ng-model="name" ng-repeat="lang in config.languages"><i class="flag-icon flag-icon-{{ countryCodeForLanguageCode(lang) | lowercase }} mr-2"></i>{{ languageData.languages[lang] }}</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	</div>
+</ng-controller>

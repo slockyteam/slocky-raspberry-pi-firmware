@@ -1,0 +1,8 @@
+.pagination-container {
+	width: 100%;
+	display: flex;
+}
+
+ul.pagination {
+	margin-bottom: 0;
+}

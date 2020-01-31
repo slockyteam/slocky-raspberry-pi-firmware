@@ -1,0 +1,51 @@
+:root {
+	--navbar-clr-bg: #132651;
+}
+
+.navbar {
+	background-color: var(--navbar-clr-bg);
+}
+
+.navbar-padding {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.avatar {
+	margin-top: -15px;
+	margin-bottom: -15px;
+	width: 44px;
+	height: 44px;
+	background-color: #000000;
+	border: 2px solid rgba(255,255,255,.5);
+}
+
+.nav-item {
+	white-space: nowrap;
+}
+
+.navbar-dark .navbar-nav .nav-link:focus img, .navbar-dark .navbar-nav .nav-link:hover img {
+	border: 2px solid rgba(255,255,255,.75);
+}
+
+.navbar-nav .nav-link, .dropdown-item, .avatar {
+	-webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	transition: all 0.2s;
+	-webkit-transition-delay: 0s;
+	-moz-transition-delay: 0s;
+	transition-delay: 0s;
+}
+
+.navbar-dark .navbar-toggler {
+	border-color: rgba(255,255,255,.5);
+}
+
+.dropdown-menu.fade-in.show {
+	animation: dropdown-fade-in .2s ease forwards;
+}
+
+@keyframes dropdown-fade-in {
+	0% { opacity: 0; transform: translateY(-1rem); }
+	100% { opacity: 1; transform: translateY(0); }
+}

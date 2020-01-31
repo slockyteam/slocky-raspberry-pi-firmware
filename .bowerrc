@@ -1,0 +1,4 @@
+{
+	"directory": "app/local_web_server/public/bower_components",
+	"allow_root": true
+}

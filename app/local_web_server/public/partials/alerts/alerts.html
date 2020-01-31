@@ -1,0 +1,15 @@
+<div class="alert-bottom custom-alert" align="left">
+	<div style="display: inline-block;">
+		<div ng-repeat="alert in alerts">
+			<div class="alert alert-{{ alert.type }}">
+				<strong>{{ alert.title }}</strong><span ng-show="alert.title && alert.message"> - </span><span ng-show="alert.message">{{ alert.message }}</span>
+				
+				<br ng-show="alert.error || alert.errors || alert.missing_parameters">
+				
+				{{ alert.errors }}
+				{{ alert.error }}
+				{{ alert.missing_parameters }}
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,195 @@
+{
+	"languages": {
+		"en": "English"
+	},
+	"footer": {
+		"copyright": "Copyright © 2019 Slocky. All rights reserved."
+	},
+	"device_details": {
+		"panel_title": "Device details",
+		"name_title": "Name:",
+		"status_title": "Status:",
+		"device_alias_title": "Device alias:",
+		"device_type_title": "Device type:",
+		"device_identifier_title": "Device identifier:",
+		"firmware_version_title": "Firmware version:",
+		"hardware_version_title": "Hardware version:",
+		"bootloader_version_title": "Bootloader version:",
+		"heartbeat_at_title": "Heartbeat at:",
+		"connected_at_title": "Connected at:",
+		"disconnected_at_title": "Disconnected at:",
+		"services_title": "Services:",
+		"online_text": "Online",
+		"offline_text": "Offline",
+		"cpu_monitoring_button": "CPU Monitoring",
+		"device_time_zone_title": "Device time zone:",
+		"network_info": {
+			"panel_title": "Network info",
+			"ethernet": {
+				"title": "Ethernet",
+				"router_title": "(Router)",
+				"dhcp_enabled_title": "DHCP enabled:",
+				"router_enabled_title": "Router enabled:"
+			},
+			"wifi": {
+				"title": "Wi-Fi",
+				"access_point_title": "(Access Point)",
+				"ssid_title": "SSID:",
+				"ap_enabled_title": "AP enabled:",
+				"ap_active_title": "AP active:",
+				"running_text": "Running",
+				"not_running_text": "Not running",
+				"ap_hidden_title": "AP hidden:",
+				"ssid_title": "SSID:"
+			},
+			"cellular": {
+				"title": "Cellular",
+				"signal_quality_title": "Signal quality:",
+				"operator_title": "Operator:",
+				"subscriber_number_title": "Subscriber number:"
+			},
+			"ip_address_title": "IP address:",
+			"broadcast_title": "Broadcast:",
+			"mask_title": "Mask:",
+			"rx_bytes_title": "RX bytes:",
+			"tx_bytes_title": "TX bytes:"
+		},
+		"reboot_button": "Reboot",
+		"reboot_device_successful": {
+			"title": "Successful",
+			"message": "Device rebooted."
+		}
+	},
+	"device_settings": {
+		"panel_title": "Device settings",
+		"web_socket_url_title": "Web socket URL: *",
+		"web_socket_url_placeholder": "Enter url",
+		"api_server_url_title": "API server URL: *",
+		"api_server_url_placeholder": "Enter url",
+		"web_socket_ping_interval_title": "Web socket ping interval (milliseconds): *",
+		"web_socket_ping_interval_placeholder": "Enter interval",
+		"web_socket_reconnect_interval_title": "Web socket reconnect interval (milliseconds): *",
+		"web_socket_reconnect_interval_placeholder": "Enter interval",
+		"web_socket_update_data_interval_title": "Web socket update data interval (milliseconds): *",
+		"web_socket_update_data_interval_placeholder": "Enter interval",
+		"device_time_zone_title": "Device time zone: *",
+		"device_time_zone_placeholder": "Enter time zone",
+		"submit_button": "Save",
+		"save_successful": {
+			"title": "Successful",
+			"message": "Device settings successfully saved."
+		},
+		"save_failure": {
+			"title": "Error",
+			"message": "Error saving device settings."
+		}
+	},
+	"network_settings": {
+		"panel_title": "Network settings",
+		"submit_button": "Save",
+		"ethernet": {
+			"title": "Ethernet",
+			"dhcp_enabled_title": "DHCP enabled:",
+			"router_enabled_title": "Router enabled:",
+			"static_ip_address_title": "Static IP address:",
+			"static_ip_address_placeholder": "Enter ip address",
+			"static_routers_title": "Static routers:",
+			"static_routers_placeholder": "Enter routers",
+			"static_domain_name_servers_title": "Static domain name servers:",
+			"static_domain_name_servers_placeholder": "Enter domain name servers",
+			"router_dhcp_range_title": "Router DHCP range:",
+			"router_dhcp_range_placeholder": "Enter router DHCP range",
+			"save_successul": {
+				"title": "Successful",
+				"message": "Ethernet settings successfully saved."
+			},
+			"save_failure": {
+				"title": "Error",
+				"message": "Error saving ethernet settings."
+			}
+		},
+		"wifi_access_point": {
+			"title": "Wi-Fi Access Point",
+			"enabled_title": "Enabled:",
+			"ssid_title": "SSID:",
+			"ssid_placeholder": "Enter ssid",
+			"password_placeholder": "Enter password",
+			"password_title": "Password:",
+			"hidden_title": "Hidden:",
+			"active_title": "Active:",
+			"running_text": "Running",
+			"not_running_text": "Not running",
+			"save_successul": {
+				"title": "Successful",
+				"message": "Wi-Fi access point settings successfully saved."
+			},
+			"save_failure": {
+				"title": "Error",
+				"message": "Error saving Wi-Fi access point settings."
+			}
+		},
+		"wifi": {
+			"title": "Wi-Fi",
+			"scan_button": "Scan",
+			"ssid_title": "SSID",
+			"security_title": "Security",
+			"signal_title": "Signal",
+			"empty": "Wi-Fi connections are empty.",
+			"connected_text": "Connected",
+			"connect_button": "Connect",
+			"password_placeholder": "Enter password",
+			"status_title": "Status",
+			"channel_title": "Channel",
+			"frequency_title": "Frequency",
+			"ip_address_title": "IP address",
+			"disconnect_button": "Disconnect",
+			"connect_connection_successful": {
+				"title": "Successful",
+				"message": "Wi-Fi connection successfully connected."
+			},
+			"connect_connection_failure": {
+				"title": "Error",
+				"message": "Error connecting to Wi-Fi connection."
+			},
+			"disconnect_connection_successful": {
+				"title": "Successful",
+				"message": "Wi-Fi connection successfully disconnected."
+			},
+			"disconnect_connection_failure": {
+				"title": "Error",
+				"message": "Error disconnecting Wi-Fi connection."
+			},
+			"delete_connection_successful": {
+				"title": "Successful",
+				"message": "Wi-Fi connection successfully deleted."
+			},
+			"delete_connection_failure": {
+				"title": "Error",
+				"message": "Error deleting Wi-Fi connection."
+			}
+		},
+		"cellular": {
+			"title": "Cellular",
+			"auth_enabled_title": "Authorization enabled:",
+			"apn_title": "APN:",
+			"apn_placeholder": "Enter apn",
+			"username_title": "Username:",
+			"username_placeholder": "Enter username",
+			"password_placeholder": "Enter password",
+			"password_title": "Password:",
+			"dial_title": "Dial number:",
+			"save_successul": {
+				"title": "Successful",
+				"message": "Cellular settings successfully saved."
+			},
+			"save_failure": {
+				"title": "Error",
+				"message": "Error saving cellular settings."
+			}
+		}
+	},
+	"boolean_values": {
+		"false": "No",
+		"true": "Yes"
+	}
+}

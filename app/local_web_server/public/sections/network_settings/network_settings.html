@@ -1,0 +1,334 @@
+<!-- NAVBAR -->
+
+<div ng-include="'partials/navbar/navbar.html'"></div>
+
+<ng-controller ng-controller="NetworkSettingsController">
+
+	<!-- CONTENT -->
+	
+	<div class="content">
+		<div class="panel panel-default">			
+			<div class="panel-heading clearfix hide-lg-down">
+				<div class="panel-heading-title">
+					<h4>{{ languageData.network_settings.panel_title }}</h4>
+				</div>
+			</div>
+			
+			<div class="panel-body" style="padding: 15px;">
+				<div class="card">
+					<div class="card-header">
+						<ul class="nav nav-tabs card-header-tabs">
+							<li class="nav-item">
+								<a class="nav-link" ng-show="isLoadingEthernetSettings == true || ethernetSettings != null" ng-class="{ active: (selectedTab == null || selectedTab == 0) }" href="#" ng-click="selectedTab = 0;">{{ languageData.network_settings.ethernet.title }}</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" ng-class="{ active: (selectedTab == 1) }" href="#" ng-click="selectedTab = 1;">{{ languageData.network_settings.wifi.title }}</a>
+							</li>
+							<li class="nav-item" ng-show="isLoadingWifiAccessPointSettings == true || wifiAccessPointSettings != null">
+								<a class="nav-link" ng-class="{ active: (selectedTab == 2) }" href="#" ng-click="selectedTab = 2;">{{ languageData.network_settings.wifi_access_point.title }}</a>
+							</li>
+							<li class="nav-item" ng-show="isLoadingCellularSettings == true || cellularSettings != null">
+								<a class="nav-link" ng-class="{ active: (selectedTab == 3) }" href="#" ng-click="selectedTab = 3;">{{ languageData.network_settings.cellular.title }}</a>
+							</li>
+						</ul>
+					</div>
+					
+					<div class="card-body" style="padding: 1px;">
+						<div ng-if="selectedTab == 0">
+							<div ng-if="isLoadingEthernetSettings == true || ethernetSettings != null">
+								<div ng-if="isLoadingEthernetSettings == false" style="padding: 15px;">
+									<form name="form" ng-submit="form.$valid && saveEthernetSettings(form);">
+										<div class="form-group">
+											<label><b>{{ languageData.network_settings.ethernet.dhcp_enabled_title }}</b></label>
+					
+											<select class="form-control mb-3" ng-model="ethernetSettings.dhcp_enabled" ng-required="true">
+						                        <option value=false ng-value=false>{{ languageData.boolean_values.false }}</option>
+						                        <option value=true ng-value=true>{{ languageData.boolean_values.true }}</option>
+						                    </select>
+										</div>
+										
+										<div class="form-group" ng-show="ethernetSettings.dhcp_enabled == false">
+											<label><b>{{ languageData.network_settings.ethernet.static_ip_address_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.ethernet.static_ip_address_placeholder }}" ng-model="ethernetSettings.static.ip_address" ng-required="!ethernetSettings.dhcp_enabled"/>
+										</div>
+										
+										<div class="form-group" ng-show="ethernetSettings.dhcp_enabled == false">
+											<label><b>{{ languageData.network_settings.ethernet.static_routers_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.ethernet.static_routers_placeholder }}" ng-model="ethernetSettings.static.routers" ng-required="!ethernetSettings.dhcp_enabled"/>
+										</div>
+										
+										<div class="form-group" ng-show="ethernetSettings.dhcp_enabled == false">
+											<label><b>{{ languageData.network_settings.ethernet.static_domain_name_servers_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.ethernet.static_domain_name_servers_placeholder }}" ng-model="ethernetSettings.static.domain_name_servers" ng-required="!ethernetSettings.dhcp_enabled"/>
+										</div>
+										
+										<div class="form-group" ng-show="ethernetSettings.dhcp_enabled == false">
+											<label><b>{{ languageData.network_settings.ethernet.router_enabled_title }}</b></label>
+					
+											<select class="form-control mb-3" ng-model="ethernetSettings.router_enabled" ng-required="true">
+						                        <option value=false ng-value=false>{{ languageData.boolean_values.false }}</option>
+						                        <option value=true ng-value=true>{{ languageData.boolean_values.true }}</option>
+						                    </select>
+										</div>
+										
+										<div class="form-group" ng-show="ethernetSettings.dhcp_enabled == false && ethernetSettings.router_enabled == true">
+											<label><b>{{ languageData.network_settings.ethernet.router_dhcp_range_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.ethernet.router_dhcp_range_placeholder }}" ng-model="ethernetSettings.router_dhcp_range" ng-required="!ethernetSettings.dhcp_enabled && ethernetSettings.router == true"/>
+										</div>
+										
+										<button type="submit" class="btn btn-success btn-block">{{ languageData.network_settings.submit_button }}</button>
+						            </form>
+								</div>
+								
+								<div ng-if="isLoadingEthernetSettings == true" class="d-flex justify-content-center" style="padding: 40px;">
+									<div class="spinner-border text-dark" role="status"></div>
+								</div>
+							</div>
+						</div>
+						
+						<div ng-if="selectedTab == 1">
+							<div style="padding: 15px;">
+								<div style="padding-bottom: 15px;">
+									<div class="table-responsive-xl">
+										<table class="table table-striped custom-table">
+											<thead>
+												<tr>
+													<th>
+														{{ languageData.network_settings.wifi.ssid_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.ip_address_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.frequency_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.status_title }}
+													</th>
+													<th>
+													</th>
+												</tr>
+											</thead>
+											
+											<tbody ng-repeat="object in wifiConnections">
+												<tr>
+													<td>{{ object.ssid ? object.ssid : '/' }}</td>
+													<td>{{ object.ip_address ? object.ip_address : '/' }}</td>
+													<td>{{ object.frequency ? object.frequency : '/' }}</td>
+													<td><span ng-show="object.connected == true" class="badge badge-success badge-pill">{{ languageData.network_settings.wifi.connected_text }}</span></td>
+													<td class="controls">
+														<button class="btn btn-sm btn-secondary" ng-show="object.connected == true" ng-click="disconnectWifiConnection(object);">{{ languageData.network_settings.wifi.disconnect_button }}</button>
+														<button class="btn btn-sm btn-secondary" ng-show="object.connected == null || object.connected == false" ng-click="connectWifiConnection(object);">{{ languageData.network_settings.wifi.connect_button }}</button>
+														<div class="btn-group">
+															<button type="button" class="btn btn-sm btn-danger border-light icon-only dropdown-toggle no-after" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+																<i class="fas fa-trash"></i>
+															</button>
+															<div class="dropdown-menu dropdown-menu-right text-center">
+																<h6 class="dropdown-header">
+																	<p>{{ languageData.confirm_alert.delete_entry_text }}</p>
+																	<a class="btn btn-sm w-25 btn-secondary mr-3" href="#">{{ languageData.confirm_alert.no_button }}</a>
+																	<a class="btn btn-sm w-25 btn-danger" href="#" ng-click="deleteWifiConnection(object);">{{ languageData.confirm_alert.yes_button }}</a>
+																</h6>
+															</div>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										
+										<div class="custom-placeholder" ng-show="(isLoadingWifiConnections == null || isLoadingWifiConnections == false) && (wifiConnections == null || wifiConnections.length == 0)">
+											<div class="custom-placeholder-vertical-center">
+												<b>{{ languageData.network_settings.wifi.empty }}</b>
+											</div>
+										</div>
+										
+										<div class="custom-placeholder" ng-show="isLoadingWifiConnections == true">
+											<div class="custom-placeholder-vertical-center">
+												<div class="spinner-border text-dark" role="status"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div style="padding-bottom: 15px;">
+									<div class="table-responsive-xl">
+										<table class="table table-striped custom-table">
+											<thead>
+												<tr>
+													<th>
+														{{ languageData.network_settings.wifi.ssid_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.security_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.channel_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.frequency_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.signal_title }}
+													</th>
+													<th>
+														{{ languageData.network_settings.wifi.status_title }}
+													</th>
+													<th>
+													</th>
+												</tr>
+											</thead>
+											
+											<tbody ng-repeat="object in wifiScannedNetworks">
+												<tr>
+													<td>{{ object.ssid ? object.ssid : '/' }}</td>
+													<td>{{ object.security ? object.security : '/' }}</td>
+													<td>{{ object.channel ? object.channel : '/' }}</td>
+													<td>{{ object.frequency ? object.frequency : '/' }}</td>
+													<td><span ng-show="object.quality < 30" class="badge badge-danger">{{ object.quality }} %</span><span ng-show="object.quality >= 30 && object.quality < 60" class="badge badge-warning">{{ object.quality }} %</span><span ng-show="object.quality >= 60" class="badge badge-success">{{ object.quality }} %</span></td>
+													<td><span class="badge badge-success badge-pill" ng-show="object.connected == true">{{ languageData.network_settings.wifi.connected_text }}</span></td>
+													<td class="controls">
+														<div ng-show="object.connected == false">
+															<div ng-show="object.security != null">
+																<form name="form" style="vertical-align: middle;" ng-submit="!form.$invalid && connectWifiConnection(object, wifiPassword);">
+																	<input id="wifiPassword" name="wifiPassword" ng-model="wifiPassword" class="form-control form-control-sm mr-2" style="display:inline-block; width: auto;" placeholder="{{ languageData.network_settings.wifi.password_placeholder }}" ng-show="showWifiPassword == true" minlength="8" maxlength="64" required>
+							
+																	<button type="submit" class="btn btn-sm btn-success" style="margin-top: -4px;" ng-show="showWifiPassword == true">
+																		{{ languageData.network_settings.wifi.connect_button }}
+																	</button>
+							
+																	<button class="btn btn-sm btn-secondary" href="" ng-show="!showWifiPassword" ng-click="showWifiPassword = true">
+																		{{ languageData.network_settings.wifi.connect_button }}
+																	</button>
+																</form>
+															</div>
+															
+															<div ng-show="object.security == null">
+																<button class="btn btn-sm btn-secondary" ng-click="connectWifiConnection(object);">{{ languageData.network_settings.wifi.connect_button }}</button>
+															</div>
+														</div>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+										
+										<div class="custom-placeholder" ng-show="isLoadingWifiScannedNetworks == true">
+											<div class="custom-placeholder-vertical-center">
+												<div class="spinner-border text-dark" role="status"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<button class="btn btn-info btn-block" href="#" ng-click="wifiScan();">{{ languageData.network_settings.wifi.scan_button }}</button>
+							</div>
+						</div>
+						
+						<div ng-if="selectedTab == 2">
+							<div ng-if="isLoadingwifiAccessPointSettings == false || wifiAccessPointSettings != null" style="padding: 15px 15px 0px 15px; margin-bottom: -10px;">
+								<label><b>{{ languageData.network_settings.wifi_access_point.active_title }}</b> <span class="badge badge-success" ng-show="wifiAccessPointSettings.active == true">{{ languageData.network_settings.wifi_access_point.running_text }}</span><span class="badge badge-secondary badge-pill" ng-show="wifiAccessPointSettings.active == false">{{ languageData.network_settings.wifi_access_point.not_running_text }}</span>
+							</div>
+							
+							<div ng-if="isLoadingWifiAccessPointSettings == true || wifiAccessPointSettings != null">
+								<div ng-if="isLoadingWifiAccessPointSettings == false" style="padding: 15px;">
+									<form name="form" ng-submit="form.$valid && saveWifiAccessPointSettings(form);">
+										<div class="form-group">
+											<label><b>{{ languageData.network_settings.wifi_access_point.enabled_title }}</b></label>
+					
+											<select class="form-control mb-3" ng-model="wifiAccessPointSettings.enabled" ng-required="true">
+						                        <option value=false ng-value=false>{{ languageData.boolean_values.false }}</option>
+						                        <option value=true ng-value=true>{{ languageData.boolean_values.true }}</option>
+						                    </select>
+										</div>
+										
+										<div class="form-group" ng-show="wifiAccessPointSettings.enabled">
+											<label><b>{{ languageData.network_settings.wifi_access_point.hidden_title }}</b></label>
+					
+											<select class="form-control mb-3" ng-model="wifiAccessPointSettings.hidden" ng-required="true">
+						                        <option value=false ng-value=false>{{ languageData.boolean_values.false }}</option>
+						                        <option value=true ng-value=true>{{ languageData.boolean_values.true }}</option>
+						                    </select>
+										</div>
+										
+										<div class="form-group" ng-show="wifiAccessPointSettings.enabled">
+											<label><b>{{ languageData.network_settings.wifi_access_point.ssid_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.wifi_access_point.ssid_placeholder }}" ng-model="wifiAccessPointSettings.ssid" ng-required="true"/>
+										</div>
+										
+										<div class="form-group" ng-show="wifiAccessPointSettings.enabled">
+											<label><b>{{ languageData.network_settings.wifi_access_point.password_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.wifi_access_point.password_placeholder }}" ng-model="wifiAccessPointSettings.password"/>
+										</div>
+										
+										<button type="submit" class="btn btn-success btn-block">{{ languageData.network_settings.submit_button }}</button>
+						            </form>
+								</div>
+								
+								<div ng-if="isLoadingAccessPointSettings == true" class="d-flex justify-content-center" style="padding: 40px;">
+									<div class="spinner-border text-dark" role="status"></div>
+								</div>
+							</div>
+						</div>
+						
+						<div ng-if="selectedTab == 3">
+							<div ng-if="isLoadingCellularSettings == true || cellularSettings">
+								<div ng-if="isLoadingCellularSettings == false" style="padding: 15px;">
+									<form name="form" ng-submit="form.$valid && saveCellularSettings(form);">
+										<div class="form-group">
+											<label><b>{{ languageData.network_settings.cellular.apn_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.cellular.apn_placeholder }}" ng-model="cellularSettings.apn" ng-required="true"/>
+										</div>
+										
+										<div class="form-group">
+											<label><b>{{ languageData.network_settings.cellular.dial_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.cellular.dial_placeholder }}" ng-model="cellularSettings.dial" ng-required="true"/>
+										</div>
+										
+										<div class="form-group">
+											<label><b>{{ languageData.network_settings.cellular.auth_enabled_title }}</b></label>
+					
+											<select class="form-control mb-3" ng-model="cellularSettings.auth_enabled" ng-required="true">
+						                        <option value=false ng-value=false>{{ languageData.boolean_values.false }}</option>
+						                        <option value=true ng-value=true>{{ languageData.boolean_values.true }}</option>
+						                    </select>
+										</div>
+										
+										<div class="form-group" ng-show="cellularSettings.auth_enabled == true">
+											<label><b>{{ languageData.network_settings.cellular.username_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.cellular.username_placeholder }}" ng-model="cellularSettings.username" ng-required="cellularSettings.auth_enabled == true"/>
+										</div>
+										
+										<div class="form-group" ng-show="cellularSettings.auth_enabled == true">
+											<label><b>{{ languageData.network_settings.cellular.password_title }}</b></label>
+					
+											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.cellular.password_placeholder }}" ng-model="cellularSettings.password" ng-required="cellularSettings.auth_enabled == true"/>
+										</div>
+										
+										<button type="submit" class="btn btn-success btn-block">{{ languageData.network_settings.submit_button }}</button>
+						            </form>
+								</div>
+								
+								<div ng-if="isLoadingCellularSettings == true" class="d-flex justify-content-center" style="padding: 40px;">
+									<div class="spinner-border text-dark" role="status"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</ng-controller>
+
+<!-- FOOTER -->
+
+<div ng-include="'partials/footer/footer.html'"></div>
