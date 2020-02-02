@@ -225,6 +225,14 @@ module.exports.loadHardwareInfo = function() {
 			}
 		});
 		
+		exec("uptime", (error, stdout, stderr) => {
+			if (error == null && stdout != null) {
+				module.exports.hardwareInfo.uptime = stdout;
+			} else {
+				module.exports.hardwareInfo.uptime = null;
+			}
+		});
+		
 		ds18x20.isDriverLoaded(function (error, isLoaded) {
 		    if (isLoaded == true) {
 			    ds18x20.getAll(function (error, tempObj) {
