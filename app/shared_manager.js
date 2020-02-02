@@ -229,7 +229,7 @@ module.exports.loadHardwareInfo = function() {
 		    if (isLoaded == true) {
 			    ds18x20.getAll(function (error, tempObj) {
 				    if (tempObj != null && Object.keys(tempObj).length > 0) {
-					    module.exports.hardwareInfo.temp = tempObj[Object.keys(tempObj)[0]];
+					    module.exports.hardwareInfo.temp = tempObj[Object.keys(tempObj)[0]].toString() + "'C";
 				    }
 				});
 		    }
