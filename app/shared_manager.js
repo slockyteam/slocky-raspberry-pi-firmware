@@ -2,6 +2,7 @@ const fs = require('fs');
 const { exec, execSync } = require('child_process');
 const checkInternetConnected = require('check-internet-connected');
 const merge = require('merge');
+const ds18x20 = require('ds18x20');
 
 /*
  * Constants
@@ -222,6 +223,16 @@ module.exports.loadHardwareInfo = function() {
 			} else {
 				module.exports.hardwareInfo.disk_memory = null;
 			}
+		});
+		
+		ds18x20.isDriverLoaded(function (error, isLoaded) {
+		    if (isLoaded == true) {
+			    ds18x20.getAll(function (error, tempObj) {
+				    if (tempObj != null && Object.keys(tempObj).length > 0) {
+					    module.exports.hardwareInfo.temp = tempObj[Object.keys(tempObj)[0]];
+				    }
+				});
+		    }
 		});
 	}
 };
