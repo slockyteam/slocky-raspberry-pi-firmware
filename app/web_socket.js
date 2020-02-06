@@ -95,6 +95,7 @@ module.exports.connect = function() {
 			  	firmware_version: SharedManager.firmwareSettings.firmware_version,
 			  	hardware_version: SharedManager.deviceSettings.hardware_version,
 			  	bootloader_version: SharedManager.bootloaderSettings.bootloader_version,
+			  	local_api_server_port: SharedManager.deviceSettings.local_api_server_port,
 			  	services: SharedManager.deviceSettings.services.map(function(service) {
 			  		return {
 				  		service_alias: service.service_alias,
