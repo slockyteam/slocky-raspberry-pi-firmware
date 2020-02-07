@@ -99,7 +99,18 @@ module.exports.loadNetworkInfo = function(callback) {
 								} else {
 									results['wlan0'].access_point.active = true;
 									
-									results['wlan0'].access_point.ssid = execSync("cat /etc/hostapd/hostapd.conf | grep ssid | cut -d '=' -f 2 | head -n 1").toString().trim();
+									var file = execSync('cat /etc/hostapd/hostapd.conf').toString();
+										
+									var object = file.substring(file.indexOf('#START'), file.indexOf('#END') + '#END'.length);
+									
+									var start = (object.indexOf('ssid=') + 'ssid='.length);
+									var ssid = object.substring(start, object.indexOf('\n', start));
+									
+									start = (object.indexOf('wpa_passphrase=') + 'wpa_passphrase='.length);
+									var password = object.substring(start, object.indexOf('\n', start));
+								
+									results['wlan0'].access_point.ssid = ssid;
+									results['wlan0'].access_point.password = password;
 								}
 								
 								resolve();
