@@ -39,7 +39,6 @@
 				"ap_active_title": "AP active:",
 				"running_text": "Running",
 				"not_running_text": "Not running",
-				"ap_hidden_title": "AP hidden:",
 				"ssid_title": "SSID:"
 			},
 			"cellular": {
@@ -115,7 +114,6 @@
 			"ssid_placeholder": "Enter ssid",
 			"password_placeholder": "Enter password",
 			"password_title": "Password:",
-			"hidden_title": "Hidden:",
 			"active_title": "Active:",
 			"running_text": "Running",
 			"not_running_text": "Not running",

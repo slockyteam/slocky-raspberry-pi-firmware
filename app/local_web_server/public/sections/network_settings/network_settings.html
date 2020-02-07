@@ -245,15 +245,6 @@
 										</div>
 										
 										<div class="form-group" ng-show="wifiAccessPointSettings.enabled">
-											<label><b>{{ languageData.network_settings.wifi_access_point.hidden_title }}</b></label>
-					
-											<select class="form-control mb-3" ng-model="wifiAccessPointSettings.hidden" ng-required="true">
-						                        <option value=false ng-value=false>{{ languageData.boolean_values.false }}</option>
-						                        <option value=true ng-value=true>{{ languageData.boolean_values.true }}</option>
-						                    </select>
-										</div>
-										
-										<div class="form-group" ng-show="wifiAccessPointSettings.enabled">
 											<label><b>{{ languageData.network_settings.wifi_access_point.ssid_title }}</b></label>
 					
 											<input class="form-control mb-3" placeholder="{{ languageData.network_settings.wifi_access_point.ssid_placeholder }}" ng-model="wifiAccessPointSettings.ssid" ng-required="true"/>

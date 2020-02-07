@@ -171,9 +171,7 @@ module.exports.readOperator = function(callback) {
 			data.forEach(function(line) {
 				value = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
 				
-				if (value.split(' ').length == 2) {
-					value = value.split(' ')[1];
-				}
+				value = value.substring(0, value.indexOf(' '));
 			});
 		}
 		

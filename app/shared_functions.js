@@ -300,15 +300,19 @@ module.exports.loadWifiAccessPointSettings = function(callback) {
 			var results = {};
 			
 			results['interface'] = execSync("cat /etc/hostapd/hostapd.conf | grep interface | cut -d '=' -f 2 | head -n 1").toString().trim();
-			results.ssid = execSync("cat /etc/hostapd/hostapd.conf | grep ssid | cut -d '=' -f 2 | head -n 1").toString().trim();
-			//results.password = execSync("cat /etc/hostapd/hostapd.conf | grep wpa_passphrase | cut -d '=' -f 2 | head -n 1").toString().trim();
-			results.hidden = execSync("cat /etc/hostapd/hostapd.conf | grep ignore_broadcast_ssid | cut -d '=' -f 2 | head -n 1").toString().trim();
 			
-			if (results.hidden == 0 || results.hidden == '0') {
-				results.hidden = false;
-			} else if (results.hidden == 1 || results.hidden == '1') {
-				results.hidden = true;
-			}
+			var file = execSync('cat /etc/hostapd/hostapd.conf').toString();
+				
+			var object = file.substring(file.indexOf('#START'), file.indexOf('#END') + '#END'.length);
+			
+			var start = (object.indexOf('ssid=') + 'ssid='.length);
+			var ssid = object.substring(start, object.indexOf('\n', start));
+			
+			start = (object.indexOf('wpa_passphrase=') + 'wpa_passphrase='.length);
+			var password = object.substring(start, object.indexOf('\n', start));
+		
+			results.ssid = ssid;
+			results.password = password;
 			
 			var promise1 = new Promise(function(resolve, reject) {
 			   	exec("sudo systemctl is-enabled hostapd", (error, stdout, stderr) => {
@@ -365,28 +369,30 @@ module.exports.loadCellularSettings = function(callback) {
 				}
 				
 				results.dial = execSync("cat /etc/chatscripts/dial").toString().replace(/^\n|\n$/g, '');
-						
-				var auth = execSync('cat /etc/ppp/peers/provider').toString();
 				
-				if (auth.includes('#noauth')) {
+				var file = execSync('cat /etc/ppp/peers/provider').toString();
+				
+				var object = file.substring(file.indexOf('#START'), file.indexOf('#END') + '#END'.length);
+			
+				if (object.includes('#noauth')) {
 					results.auth_enabled = true;
 				} else {
 					results.auth_enabled = false;
 				}
 				
-				var username = execSync("cat /etc/ppp/peers/provider | grep 'user '").toString();
+				if (object.indexOf('user "') > 0) {
+					var start = (object.indexOf('user "') + 'user "'.length);
+					var username = object.substring(start, object.indexOf('"\n', start));
+					
+					results.username = username
+				}
 				
-				const usernameStartIndex = username.indexOf('user "') + 'user "'.length;
-				const usernameEndIndex = username.indexOf('"\n');
-				
-				results.username = username.substring(usernameStartIndex, usernameEndIndex);
-				
-				var password = execSync("cat /etc/ppp/peers/provider | grep 'password '").toString();
-				
-				const passwordStartIndex = password.indexOf('password "') + 'password "'.length;
-				const passwordEndIndex = password.indexOf('"\n');
-				
-				results.password = password.substring(passwordStartIndex, passwordEndIndex);
+				if (object.indexOf('password "') > 0) {
+					var start = (object.indexOf('password "') + 'password "'.length);
+					var password = object.substring(start, object.indexOf('"\n', start));
+					
+					results.password = password
+				}
 				
 				return callback(null, results);
 			} else {
@@ -411,22 +417,11 @@ module.exports.saveWifiAccessPointSettings = function(data, callback) {
 				var start = (object.indexOf('ssid=') + 'ssid='.length);
 				var ssid = object.substring(start, object.indexOf('\n', start));
 				
-				start = (object.indexOf('ignore_broadcast_ssid=') + 'ignore_broadcast_ssid='.length);
-				var hidden = object.substring(start, object.indexOf('\n', start));
-				
 				start = (object.indexOf('wpa_passphrase=') + 'wpa_passphrase='.length);
 				var password = object.substring(start, object.indexOf('\n', start));
 				
 				if (data.ssid != null) {
 					ssid = data.ssid;
-				}
-				
-				if (data.hidden != null) {
-					if (data.hidden == true) {
-						data.hidden = "1";
-					} else {
-						data.hidden = "0";
-					}
 				}
 				
 				if (data.password != null && data.password.length > 0) {
@@ -436,7 +431,6 @@ module.exports.saveWifiAccessPointSettings = function(data, callback) {
 				var newObject = "";
 				newObject += "#START\n";
 				newObject += "ssid=" + ssid + "\n";
-				newObject += "ignore_broadcast_ssid=" + hidden + "\n";
 				newObject += "wpa_passphrase=" + password + "\n";
 				newObject += "#END";
 				
@@ -521,50 +515,22 @@ module.exports.saveCellularSettings = function(data, callback) {
 					}
 					
 					var file = execSync('cat /etc/ppp/peers/provider').toString();
-					
-					if (file.includes('#noauth')) {
-						const noauthStartIndex = file.indexOf('#noauth');
-						const noauthEndIndex = file.indexOf('\n', noauthStartIndex);
-					
-						file = file.replace(file.substring(noauthStartIndex, noauthEndIndex + 1), '');
-					} else if (file.includes('noauth')) {
-						const noauthStartIndex = file.indexOf('noauth');
-						const noauthEndIndex = file.indexOf('\n', noauthStartIndex);
-					
-						file = file.replace(file.substring(noauthStartIndex, noauthEndIndex + 1), '');
-					}
-					
-					const userStartIndex = file.indexOf('user "');
-					const userEndIndex = file.indexOf('\n', userStartIndex);
-					
-					file = file.replace(file.substring(userStartIndex, userEndIndex + 1), '');
-					
-					const passwordStartIndex = file.indexOf('password "');
-					const passwordEndIndex = file.indexOf('\n', passwordStartIndex);
-					
-					file = file.replace(file.substring(passwordStartIndex, passwordEndIndex + 1), '');
-					
-					for (var i = (file.length - 1); i >= 0; i--) {
-						const value = file.charAt(i);
-						
-						if (value == '\n') {
-							file = file.substring(0, i);
-						} else {
-							break;
-						}
-					}
-					
-					file += '\n\n';
+				
+					var newObject = "";
+					newObject += "#START\n";
 					
 					if (data.auth_enabled != null && data.auth_enabled == true) {
-						file += '#noauth\n';
+						newObject += "#noauth\n";
 					} else {
-						file += 'noauth\n';
+						newObject += "noauth\n";
 					}
+						
+					newObject += 'user "' + data.username + '"\n';
+					newObject += 'password "' + data.password + '"\n';
+					newObject += "#END";
 					
-					file += 'user "' + data.username + '"\n';
-					file += 'password "' + data.password + '"\n';
-					
+					file = file.replace(file.substring(file.indexOf('#START'), file.indexOf('#END') + '#END'.length), newObject);
+							
 					fs.writeFileSync('/etc/ppp/peers/provider', file);
 					
 					callback(null, null);

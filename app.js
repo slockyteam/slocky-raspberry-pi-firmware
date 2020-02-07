@@ -75,7 +75,7 @@ Promise.all([lcdPromise, lteModemPromise]).then(function(error, results) {
 					
 					setInterval(function() {
 						readData();
-					}, 60000);
+					}, 30000);
 				}
 			} catch (error) {
 			}
