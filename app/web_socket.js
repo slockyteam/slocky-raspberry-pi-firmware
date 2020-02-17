@@ -43,7 +43,8 @@ module.exports.init = function() {
 	setInterval(function() {
 		if (webSocketConnection != null && webSocketConnection.readyState == ws.OPEN) {
 			module.exports.webSocketSend({
-				command: 'device_ping'
+				command: 'device_ping',
+				device_identifier: SharedManager.deviceSettings.device_identifier
 			});
 		}
 	}, SharedManager.deviceSettings.web_socket_ping_interval);
