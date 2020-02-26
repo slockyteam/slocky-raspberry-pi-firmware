@@ -87,7 +87,7 @@ module.exports.loadNetworkInfo = function(callback) {
 					results['wlan0'].tx_bytes = txSplited[1].substring(txSplited[1].indexOf(' ') + 1).toString().replace(/^\n|\n$/g, '');
 				} catch (error) {
 				}
-			
+
 				promises.push(new Promise(function(resolve, reject) {
 				   	exec("sudo systemctl is-enabled hostapd", (error, stdout, stderr) => {
 						if (stdout.includes('enabled') && execSync("cat /etc/hostapd/hostapd.conf | grep interface | cut -d '=' -f 2 | head -n 1").toString().includes('wlan0')) {
@@ -648,6 +648,21 @@ module.exports.saveDeviceSettings = function(data, callback) {
 module.exports.rebootDevice = function() {
 	function reboot() {
 		WebSocket.closeConnection();
+		
+		if (SharedManager.deviceSettings.services != null) {
+			SharedManager.deviceSettings.services.forEach(function(service) {
+				if (fs.existsSync(SharedManager.servicesFolderPath + '/' + service.service_folder + '/process.json')) {
+					const rawdata = fs.readFileSync(SharedManager.servicesFolderPath + '/' + service.service_folder + '/process.json');
+					
+					try {
+						const json = JSON.parse(rawdata);
+						
+						execSync('kill ' + json.pid);
+					} catch (error) {
+					}
+				}
+			});
+		}
 		
 		execSync('reboot');
 	};

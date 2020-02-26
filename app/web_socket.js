@@ -44,6 +44,7 @@ module.exports.init = function() {
 		if (webSocketConnection != null && webSocketConnection.readyState == ws.OPEN) {
 			module.exports.webSocketSend({
 				command: 'device_ping',
+				device_alias: SharedManager.deviceSettings.device_alias,
 				device_identifier: SharedManager.deviceSettings.device_identifier
 			});
 		}
@@ -314,12 +315,6 @@ module.exports.connect = function() {
 						}
 						case 'update_device_firmware': {
 							if (json.data != null && json.data.file_url != null) {
-								function reboot() {
-									module.exports.closeConnection();
-								
-									execSync('reboot');
-								};
-								
 								module.exports.webSocketSend(json);
 								
 								console.log('Firmware file downloading...');
@@ -339,13 +334,7 @@ module.exports.connect = function() {
 								  			
 								  			module.exports.closeConnection();
 								  			
-								  			if (Lcd.lcd != null) {
-												Lcd.lcd.clear(function() {
-													reboot();
-												});
-											} else {
-												reboot();
-											}
+								  			SharedFunctions.rebootDevice();
 								  		});
 								  	});
 								}).on('error', function(error) {
@@ -364,12 +353,6 @@ module.exports.connect = function() {
 						}
 						case 'update_device_bootloader': {
 							if (json.data != null && json.data.file_url != null) {
-								function reboot() {
-									module.exports.closeConnection();
-								
-									execSync('reboot');
-								};
-								
 								module.exports.webSocketSend(json);
 								
 								console.log('Bootloader file downloading...');
@@ -389,13 +372,7 @@ module.exports.connect = function() {
 								  			
 								  			module.exports.closeConnection();
 								  			
-								  			if (Lcd.lcd != null) {
-												Lcd.lcd.clear(function() {
-													reboot();
-												});
-											} else {
-												reboot();
-											}
+								  			SharedFunctions.rebootDevice();
 								  		});
 								  	});
 								}).on('error', function(error) {
