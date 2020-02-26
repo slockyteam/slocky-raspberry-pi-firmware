@@ -110,7 +110,7 @@ module.exports.loadNetworkInfo = function(callback) {
 									var password = object.substring(start, object.indexOf('\n', start));
 								
 									results['wlan0'].access_point.ssid = ssid;
-									results['wlan0'].access_point.password = password;
+									//results['wlan0'].access_point.password = password;
 								}
 								
 								resolve();
@@ -323,7 +323,7 @@ module.exports.loadWifiAccessPointSettings = function(callback) {
 			var password = object.substring(start, object.indexOf('\n', start));
 		
 			results.ssid = ssid;
-			results.password = password;
+			//results.password = password;
 			
 			var promise1 = new Promise(function(resolve, reject) {
 			   	exec("sudo systemctl is-enabled hostapd", (error, stdout, stderr) => {
