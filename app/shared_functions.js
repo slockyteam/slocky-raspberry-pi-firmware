@@ -518,7 +518,7 @@ module.exports.saveCellularSettings = function(data, callback) {
 			if (SharedManager.deviceSettings.hardware.includes('Raspberry') == true) {
 				if (SharedManager.deviceSettings.lte_modem != null) {
 					if (data.apn != null) {
-						fs.writeFileSync('/etc/chatscripts/apn', 'AT+CGDCONT=1,"IP","' + data.apn + "'");
+						fs.writeFileSync('/etc/chatscripts/apn', 'AT+CGDCONT=1,"IP","' + data.apn + '"\n');
 					}
 					
 					if (data.dial != null) {
