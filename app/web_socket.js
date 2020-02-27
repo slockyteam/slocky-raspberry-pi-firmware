@@ -238,7 +238,7 @@ module.exports.connect = function() {
 							break;
 						}
 						case 'save_cellular_settings': {
-							SharedFunctions.saveCellularSettings(function(error, results) {
+							SharedFunctions.saveCellularSettings(json.data, function(error, results) {
 								if (error) {
 									json.error = error;
 								
