@@ -536,8 +536,8 @@ module.exports.saveCellularSettings = function(data, callback) {
 						newObject += "noauth\n";
 					}
 						
-					newObject += 'user "' + data.username + '"\n';
-					newObject += 'password "' + data.password + '"\n';
+					newObject += 'user "' + data.username ? data.username : '' + '"\n';
+					newObject += 'password "' + data.password ? data.password : '' + '"\n';
 					newObject += "#END";
 					
 					file = file.replace(file.substring(file.indexOf('#START'), file.indexOf('#END') + '#END'.length), newObject);
