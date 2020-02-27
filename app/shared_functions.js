@@ -535,9 +535,15 @@ module.exports.saveCellularSettings = function(data, callback) {
 					} else {
 						newObject += "noauth\n";
 					}
-						
-					newObject += 'user "' + data.username ? data.username : '' + '"\n';
-					newObject += 'password "' + data.password ? data.password : '' + '"\n';
+					
+					if (data.username != null && data.username != undefined) {
+						newObject += 'user "' + data.username + '"\n';
+					}
+					
+					if (data.password != null && data.password != undefined) {
+						newObject += 'password "' + data.password + '"\n';
+					}
+					
 					newObject += "#END";
 					
 					file = file.replace(file.substring(file.indexOf('#START'), file.indexOf('#END') + '#END'.length), newObject);
