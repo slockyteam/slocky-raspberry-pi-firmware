@@ -227,7 +227,7 @@ module.exports.loadHardwareInfo = function() {
 		
 		exec("uptime", (error, stdout, stderr) => {
 			if (error == null && stdout != null) {
-				module.exports.hardwareInfo.uptime = stdout;
+				module.exports.hardwareInfo.uptime = stdout.toString().replace(/^\n|\n$/g, '').trim();
 			} else {
 				module.exports.hardwareInfo.uptime = null;
 			}
