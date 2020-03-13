@@ -48,7 +48,7 @@ module.exports.init = function() {
 				device_identifier: SharedManager.deviceSettings.device_identifier
 			});
 		}
-	}, SharedManager.deviceSettings.web_socket_ping_interval);
+	}, SharedManager.firmwareSettings.web_socket_ping_interval);
 	
 	setInterval(function() {
 		if (lastPongDate != null) {
@@ -67,7 +67,7 @@ module.exports.init = function() {
 		if (webSocketConnection == null) {
 			module.exports.connect();
 		}
-	}, SharedManager.deviceSettings.web_socket_reconnect_interval);
+	}, SharedManager.firmwareSettings.web_socket_reconnect_interval);
 };
 
 module.exports.connect = function() {

@@ -149,4 +149,4 @@ setInterval(function() {
 	SharedManager.loadHardwareInfo();
 	
 	WebSocket.sendUpdateData();
-}, SharedManager.deviceSettings.web_socket_update_data_interval);
+}, SharedManager.firmwareSettings.web_socket_update_data_interval);
