@@ -63,20 +63,20 @@ module.exports.update = function() {
 					module.exports.lcd.setCursor(0, 1);
 					
 					switch (WebSocket.webSocketStatus) {
-						case 'connecting': {
-							string = 'WS: Connecting';
+						case 'disconnected': {
+							string = 'Disconnected';
 							break;
 						}
 						case 'connected': {
-							string = 'WS: Connected';
+							string = 'Connected';
 							break;
 						}
 						case 'no_internet': {
-							string = 'WS: No internet';
+							string = 'No internet';
 							break;
 						}
 						default: {
-							string = 'WS:';
+							string = '';
 							break;
 						}
 					}

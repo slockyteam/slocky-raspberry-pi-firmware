@@ -72,7 +72,7 @@ module.exports.init = function() {
 
 module.exports.connect = function() {
 	function webSocketConnect() {
-		module.exports.webSocketStatus = 'connecting';
+		module.exports.webSocketStatus = 'disconnected';
 		Lcd.update();
 		
 		webSocketConnection = new ws(SharedManager.deviceSettings.web_socket_url, {
