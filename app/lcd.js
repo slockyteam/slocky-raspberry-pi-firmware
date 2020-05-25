@@ -64,15 +64,15 @@ module.exports.update = function() {
 					
 					switch (WebSocket.webSocketStatus) {
 						case 'disconnected': {
-							string = 'Disconnected';
+							string = 'Status: Disconnected';
 							break;
 						}
 						case 'connected': {
-							string = 'Connected';
+							string = 'Status: Connected';
 							break;
 						}
 						case 'no_internet': {
-							string = 'No internet';
+							string = 'Status: No internet';
 							break;
 						}
 						default: {
