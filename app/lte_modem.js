@@ -38,8 +38,6 @@ module.exports.init = function(openCallback) {
 		const parser = module.exports.serialPort.pipe(new Readline({ delimiter: '\r\n' }));
 		
 		parser.on('data', function(data) {
-			console.log(data);
-			
 			const command = data.substring(0, data.indexOf(':'));
 			
 			if (globalResolve[command] != null) {
