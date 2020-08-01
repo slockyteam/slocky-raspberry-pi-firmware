@@ -14,6 +14,7 @@ var parser;
 var globalResolve = {};
 var receivedData = [];
 var receivedCommand;
+var waitingResponse = false;
 
 module.exports.operator = null;
 module.exports.signalQuality = null;
@@ -37,6 +38,8 @@ module.exports.init = function(openCallback) {
 		const parser = module.exports.serialPort.pipe(new Readline({ delimiter: '\r\n' }));
 		
 		parser.on('data', function(data) {
+			console.log(data);
+			
 			const command = data.substring(0, data.indexOf(':'));
 			
 			if (globalResolve[command] != null) {
@@ -51,6 +54,8 @@ module.exports.init = function(openCallback) {
 				receivedCommand = null;
 				receivedData.splice(0, receivedData.length);
 			}
+			
+			waitingResponse = false;
 		});
 		
 		return true;
@@ -61,7 +66,61 @@ module.exports.init = function(openCallback) {
 
 module.exports.readValue = function(command, callback) {
 	if (module.exports.isSerialPortOpened()) {
-		const requestId = command.replace('AT', '').replace('?', '');
+		var waitTimer = setInterval(function() {
+			if (waitingResponse == false) {
+				waitingResponse = true;
+				
+				clearInterval(waitTimer);
+				
+				const requestId = command.replace('AT', '').replace('?', '');
+				
+				var promiseTimeout;
+				var intervalTimer;
+				
+				var promise = new Promise((resolve, reject) => {
+					promiseTimeout = setTimeout(function() {
+			            if (promiseTimeout != null) {
+							clearTimeout(promiseTimeout);
+						}
+						
+						if (intervalTimer != null) {
+							clearTimeout(intervalTimer);
+						}
+			            
+			            resolve();
+			        }, 5000);
+			        
+			        intervalTimer = setInterval(function() {
+				        if (Object.keys(globalResolve).length == 0) {
+				        	if (intervalTimer != null) {
+								clearTimeout(intervalTimer);
+							}
+							
+							globalResolve[requestId] = resolve;
+					        module.exports.serialPort.write(command + '\r');
+				        }
+			        }, 100);
+				});
+				
+				promise.then(function(value) {
+					if (globalResolve[requestId] != null) {
+				    	delete globalResolve[requestId];
+				    }
+				    
+				    if (promiseTimeout != null) {
+						clearTimeout(promiseTimeout);
+					}
+					
+					if (intervalTimer != null) {
+						clearTimeout(intervalTimer);
+					}
+						
+					callback(value);
+				});
+			}
+		}, 100);
+		
+		/*const requestId = command.replace('AT', '').replace('?', '');
 		
 		var promiseTimeout;
 		var intervalTimer;
@@ -105,7 +164,7 @@ module.exports.readValue = function(command, callback) {
 			}
 				
 			callback(value);
-		});
+		});*/
 		
 		return true;
 	} else {
@@ -171,7 +230,7 @@ module.exports.readOperator = function(callback) {
 			data.forEach(function(line) {
 				value = line.substring(line.indexOf('"') + 1, line.lastIndexOf('"'));
 				
-				value = value.substring(0, value.indexOf(' '));
+				//value = value.substring(0, value.indexOf(' '));
 			});
 		}
 		
